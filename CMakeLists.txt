@@ -1,5 +1,7 @@
-project(ObjRecRANSACRun)
 cmake_minimum_required(VERSION 2.8.3)
+project(objrec_core)
+
+find_package(catkin REQUIRED)
 
 IF(OBJREC_USE_CUDA)
   set(OBJREC_CUDA_DEVICE_ID 1 CACHE STRING "Which GPU device to use when running")
@@ -15,6 +17,13 @@ IF(OBJREC_USE_CUDA)
   #add_definitions(-DOBJ_REC_RANSAC_VERBOSE_1)
   #add_definitions(-DOBJ_REC_RANSAC_VERBOSE_2)
 ENDIF(OBJREC_USE_CUDA)
+
+catkin_package(
+    DEPENDS # none
+    CATKIN_DEPENDS # none
+    INCLUDE_DIRS src
+    LIBRARIES ObjRecRANSAC
+)
 
 find_package(Boost COMPONENTS thread system REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -82,8 +91,8 @@ target_link_libraries(ObjRecRANSACRun ObjRecRANSAC BasicToolsL1 BasicTools VtkBa
 #add_library(Utility utility.h utility.cpp) 
 #target_link_libraries(Utility ${PCL_LIBRARIES} ${OpenCV_LIBS})
 
-add_library(Greedy src/Greedy/utility.h src/Greedy/utility.cpp src/Greedy/seg.h src/Greedy/seg.cpp) 
-target_link_libraries(Greedy ${PCL_LIBRARIES} ${OpenCV_LIBS})
+add_library(Greedy src/Greedy/utility.h src/Greedy/utility.cpp src/Greedy/seg.h src/Greedy/seg.cpp)
+target_link_libraries(Greedy ObjRecRANSAC ${PCL_LIBRARIES} ${OpenCV_LIBS})
 
 add_executable(SegRansac main_seg.cpp)
 target_link_libraries(SegRansac ObjRecRANSAC BasicToolsL1 BasicTools VtkBasics vtkIO vtkCommon vtkRendering Greedy ${OpenCV_LIBS} ${PCL_LIBRARIES} rt)
@@ -107,7 +116,6 @@ install(DIRECTORY src/
   )
 
 install(DIRECTORY data
-  DESTINATION share/ObjRecRANSAC)
-
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 install(FILES package.xml
-  DESTINATION share/ObjRecRANSAC)
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
