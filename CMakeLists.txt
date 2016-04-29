@@ -3,6 +3,7 @@ project(objrec_core)
 
 find_package(catkin REQUIRED)
 
+set(OBJREC_USE_CUDA 1)
 IF(OBJREC_USE_CUDA)
   set(OBJREC_CUDA_DEVICE_ID 1 CACHE STRING "Which GPU device to use when running")
   add_definitions(-DUSE_CUDA)
