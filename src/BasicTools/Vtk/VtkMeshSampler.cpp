@@ -63,7 +63,11 @@ void VtkMeshSampler::sample(vtkPolyData* in, vtkPoints* out, int numberOfPoints)
 	vtkTriangleFilter* tria_filter = vtkTriangleFilter::New();
 	  tria_filter->PassLinesOff();
 	  tria_filter->PassVertsOff();
-	  tria_filter->SetInput(in);
+#if VTK_MAJOR_VERSION <= 5
+  		tria_filter->SetInput(in);
+#else
+  		tria_filter->SetInputData(in);
+#endif
 	  tria_filter->Update();
 	vtkPolyData* mesh = tria_filter->GetOutput();
 	  mesh->BuildLinks();
@@ -133,7 +137,11 @@ void VtkMeshSampler::estimateAndSample(vtkPolyData* in, vtkPolyData* out, int nu
 	vtkTriangleFilter* tria_filter = vtkTriangleFilter::New();
 	  tria_filter->PassLinesOff();
 	  tria_filter->PassVertsOff();
-	  tria_filter->SetInput(in);
+#if VTK_MAJOR_VERSION <= 5
+  		tria_filter->SetInput(in);
+#else
+  		tria_filter->SetInputData(in);
+#endif
 	  tria_filter->Update();
 
 	vtkPolyDataNormals* normals_filter = vtkPolyDataNormals::New();

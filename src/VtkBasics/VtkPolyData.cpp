@@ -19,8 +19,11 @@ VtkPolyData::VtkPolyData(vtkPolyData *polyData)
 	}
 
 	mMapper = vtkPolyDataMapper::New();
+#if VTK_MAJOR_VERSION <= 5
 	mMapper->SetInput(mPolyData);
-
+#else
+	mMapper->SetInputData(mPolyData);
+#endif
 	mActor = vtkActor::New();
 	mActor->SetMapper(mMapper);
 

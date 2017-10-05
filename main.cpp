@@ -293,7 +293,7 @@ void visualize(list<boost::shared_ptr<PointSetShape> >& detectedShapes, vtkPoint
 
 		// Transform the model instance using the estimated rigid transform
 		vtkTransformPolyDataFilter *transformer = vtkTransformPolyDataFilter::New();
-		  transformer->SetInput(shape->getHighResModel());
+		  transformer->SetInputData(shape->getHighResModel());
 		  VtkTransform::mat4x4ToTransformer((const double**)mat4x4, transformer);
 
 		// Visualize the transformed model

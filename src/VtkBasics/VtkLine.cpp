@@ -24,10 +24,18 @@ void VtkLine::init(double x1, double y1, double z1, double x2, double y2, double
 
 	mLine->SetPoint1(x1, y1, z1);
 	mLine->SetPoint2(x2, y2, z2);
+#if VTK_MAJOR_VERSION <= 5
 	mTube->SetInput(mLine->GetOutput());
+#else
+	mTube->SetInputData(mLine->GetOutput());
+#endif
 	mTube->SetNumberOfSides(8);
 	mTube->SetRadius(radius);
-	mMapper->SetInput(mTube->GetOutput());
+#if VTK_MAJOR_VERSION <= 5
+	mTube->SetInput(mTube->GetOutput());
+#else
+	mTube->SetInputData(mTube->GetOutput());
+#endif
 	mActor->SetMapper(mMapper);
 	mActor->GetProperty()->SetColor(1.0, 0.0, 0.0);
 	mActor->SetPosition(0.0, 0.0, 0.0);

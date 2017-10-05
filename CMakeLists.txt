@@ -3,7 +3,7 @@ project(objrec_core)
 
 find_package(catkin REQUIRED)
 
-set(OBJREC_USE_CUDA 1)
+set(OBJREC_USE_CUDA 0)
 IF(OBJREC_USE_CUDA)
   set(OBJREC_CUDA_DEVICE_ID 1 CACHE STRING "Which GPU device to use when running")
   add_definitions(-DUSE_CUDA)
@@ -13,6 +13,9 @@ IF(OBJREC_USE_CUDA)
   FIND_PACKAGE(CUDA REQUIRED)
 
   add_definitions(-DOBJ_REC_RANSAC_PROFILE)
+
+  SET(CUDA_INCLUDE_DIRS "/usr/local/cuda/include" ${CUDA_INCLUDE_DIRS})
+SET(CUDA_LIBRARIES ${CUDA_LIBRARIES} "/usr/local/cuda/lib64/libcudart.so" "/usr/lib64/libcuda.so" "/usr/local/cuda/lib64/libcublas.so")
 
   #add_definitions(-DOBJ_REC_RANSAC_VERBOSE)
   #add_definitions(-DOBJ_REC_RANSAC_VERBOSE_1)
@@ -84,30 +87,30 @@ link_directories(
 if(OBJREC_USE_CUDA)
   CUDA_ADD_EXECUTABLE(ObjRecRANSACRun main.cpp)
 else()
-  add_executable(ObjRecRANSACRun main.cpp)
+  # add_executable(ObjRecRANSACRun main.cpp)
 endif()
 
-target_link_libraries(ObjRecRANSACRun ObjRecRANSAC BasicToolsL1 BasicTools VtkBasics vtkIO vtkCommon vtkRendering ${OpenCV_LIBS} rt ${PCL_LIBRARIES})
+# target_link_libraries(ObjRecRANSACRun ObjRecRANSAC BasicToolsL1 BasicTools ${VTK_LIBRARIES} ${OpenCV_LIBS} rt ${PCL_LIBRARIES})
 
 #add_library(Utility utility.h utility.cpp) 
 #target_link_libraries(Utility ${PCL_LIBRARIES} ${OpenCV_LIBS})
 
 add_library(Greedy src/Greedy/utility.h src/Greedy/utility.cpp src/Greedy/seg.h src/Greedy/seg.cpp)
-target_link_libraries(Greedy ObjRecRANSAC ${PCL_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(Greedy ObjRecRANSAC ${VTK_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBS})
 
 add_executable(SegRansac main_seg.cpp)
-target_link_libraries(SegRansac ObjRecRANSAC BasicToolsL1 BasicTools VtkBasics vtkIO vtkCommon vtkRendering Greedy ${OpenCV_LIBS} ${PCL_LIBRARIES} rt)
+target_link_libraries(SegRansac ObjRecRANSAC BasicToolsL1 BasicTools ${VTK_LIBRARIES} Greedy ${OpenCV_LIBS} ${PCL_LIBRARIES} rt)
 
 add_executable(poseTest main_test_pose.cpp)
-target_link_libraries(poseTest ObjRecRANSAC BasicToolsL1 BasicTools VtkBasics vtkIO vtkCommon vtkRendering Greedy ${OpenCV_LIBS} ${PCL_LIBRARIES} rt)
+target_link_libraries(poseTest ObjRecRANSAC BasicToolsL1 BasicTools ${VTK_LIBRARIES} Greedy ${OpenCV_LIBS} ${PCL_LIBRARIES} rt)
 
 add_executable(segTest main_test_seg.cpp)
-target_link_libraries(segTest ObjRecRANSAC BasicToolsL1 BasicTools VtkBasics vtkIO vtkCommon vtkRendering Greedy ${OpenCV_LIBS} ${PCL_LIBRARIES} rt)
+target_link_libraries(segTest ObjRecRANSAC BasicToolsL1 BasicTools ${VTK_LIBRARIES} Greedy ${OpenCV_LIBS} ${PCL_LIBRARIES} rt)
 
-install(TARGETS ObjRecRANSACRun
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib)
+# install(TARGETS ObjRecRANSACRun
+#   RUNTIME DESTINATION bin
+#   LIBRARY DESTINATION lib
+#   ARCHIVE DESTINATION lib)
 
 install(DIRECTORY src/
   DESTINATION include

@@ -43,7 +43,7 @@ add_library(BasicTools SHARED
 	@_STOCH_@
 	@_MYVTK_@
 )
-target_link_libraries(BasicTools vtkRendering)
+target_link_libraries(BasicTools vtkRenderingOpenGL)
 
 add_library(BasicToolsStatic STATIC
 	@_AUX_@

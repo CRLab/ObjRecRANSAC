@@ -113,7 +113,12 @@ VtkPoints::VtkPoints(vtkPolyData* input, bool colorModeByScalar)
 
 	mGlyphs->SetScaleFactor(1.0);
 	mGlyphs->SetSourceConnection(mSphereSrc->GetOutputPort());
+
+#if VTK_MAJOR_VERSION <= 5
 	mGlyphs->SetInput(mPoints);
+#else
+	mGlyphs->SetInputData(mPoints);
+#endif
 
 	if ( colorModeByScalar )
 	{
@@ -159,7 +164,12 @@ void VtkPoints::init(vtkPoints *input)
 	mGlyphs->ScalingOn();
 	mGlyphs->SetScaleFactor(1.0);
 	mGlyphs->SetSourceConnection(mSphereSrc->GetOutputPort());
+
+#if VTK_MAJOR_VERSION <= 5
 	mGlyphs->SetInput(mPoints);
+#else
+	mGlyphs->SetInputData(mPoints);
+#endif
 
 	mMapper->ScalarVisibilityOff();
 	mMapper->SetInputConnection(mGlyphs->GetOutputPort());

@@ -33,7 +33,7 @@ public:
 	/** Inherited from 'VtkObject' */
 	vtkPolyData* getPolyData(){ return mPoints;}
 
-	void updateGlyphsGeometry(){ mPoints->Update(); mGlyphs->Update(); mSphereSrc->Update();}
+	void updateGlyphsGeometry(){ std::cout << "This no longer updates. Please fix me." << std::endl;/*mPoints->Update(); /* mGlyphs->Update();  mSphereSrc->Update(); */}
 
 	double getNextPointMeanDistance();
 	void setColor(double r, double g, double b){ mActor->GetProperty()->SetColor(r, g, b);}
